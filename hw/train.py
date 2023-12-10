@@ -1,4 +1,3 @@
-import joblib
 import pandas as pd
 from catboost import CatBoostClassifier
 from sklearn.model_selection import train_test_split
@@ -38,12 +37,14 @@ class CatBoostModel:
     def score(self, X, y):
         return self.model.score(X, y)
 
-    def save_model(self, filename="model/catboost_model.pkl"):
-        joblib.dump(self.model, filename)
+    def save_model(self, filename="model/catboost_model"):
+        self.model.save_model(filename, format="cbm")
 
     @staticmethod
-    def load_model(filename="model/catboost_model.pkl"):
-        loaded_model = joblib.load(filename)
+    def load_model(filename="model/catboost_model"):
+        loaded_model = CatBoostClassifier()
+        loaded_model.load_model(filename)
+
         model_instance = CatBoostModel()
         model_instance.model = loaded_model
         return model_instance
